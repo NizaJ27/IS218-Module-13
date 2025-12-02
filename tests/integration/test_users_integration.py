@@ -31,11 +31,11 @@ def test_register_user_success():
     r = client.post("/users/register", json=payload)
     assert r.status_code == 200
     data = r.json()
-    assert data["username"] == "testuser1"
-    assert data["email"] == "testuser1@example.com"
-    assert "password" not in data
-    assert "password_hash" not in data
-    assert "id" in data
+    # Now returns JWT token instead of user data
+    assert "access_token" in data
+    assert "token_type" in data
+    assert data["token_type"] == "bearer"
+    assert len(data["access_token"]) > 0
 
 
 def test_register_duplicate_user():
@@ -72,8 +72,11 @@ def test_login_user_success():
     r = client.post("/users/login", json=login_payload)
     assert r.status_code == 200
     data = r.json()
-    assert data["username"] == "loginuser1"
-    assert "password" not in data
+    # Now returns JWT token instead of user data
+    assert "access_token" in data
+    assert "token_type" in data
+    assert data["token_type"] == "bearer"
+    assert len(data["access_token"]) > 0
 
 
 def test_login_invalid_username():
@@ -109,9 +112,10 @@ def test_register_and_uniqueness():
     r = client.post("/users/register", json=payload)
     assert r.status_code == 200
     data = r.json()
-    assert data["username"] == "tester1"
-    assert data["email"] == "tester1@example.com"
-    assert "password_hash" not in data
+    # Now returns JWT token instead of user data
+    assert "access_token" in data
+    assert "token_type" in data
+    assert data["token_type"] == "bearer"
 
     # Attempt duplicate
     r2 = client.post("/users/register", json=payload)
