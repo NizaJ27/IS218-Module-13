@@ -48,7 +48,8 @@ def test_register_duplicate_user():
     # Attempt duplicate
     r2 = client.post("/users/register", json=payload)
     assert r2.status_code == 400
-    assert "already exists" in r2.json()["detail"].lower()
+    response_data = r2.json()
+    assert "detail" in response_data and "already exists" in response_data["detail"].lower()
 
 
 def test_register_invalid_email():
@@ -97,7 +98,8 @@ def test_login_invalid_password():
     login_payload = {"username": "loginuser2", "password": "wrongpassword"}
     r = client.post("/users/login", json=login_payload)
     assert r.status_code == 401
-    assert "invalid" in r.json()["detail"].lower()
+    response_data = r.json()
+    assert "detail" in response_data and "invalid" in response_data["detail"].lower()
 
 
 def test_register_and_uniqueness():

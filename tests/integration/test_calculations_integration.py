@@ -111,7 +111,7 @@ def test_edit_calculation_via_api():
     calc_id = create_resp.json()["id"]
     
     # Update it
-    update_payload = {"a": 10, "b": 2, "type": "Subtract"}
+    update_payload = {"a": 10, "b": 2, "type": "Sub"}
     r = client.put(f"/calculations/{calc_id}", json=update_payload)
     assert r.status_code == 200
     data = r.json()
