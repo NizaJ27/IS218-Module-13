@@ -45,6 +45,12 @@ jobs:
       - name: Run tests (unit + integration)
         run: pytest -q tests/unit tests/integration
 
+      - name: Install Playwright browsers
+        run: playwright install --with-deps chromium
+
+      - name: Run Playwright E2E tests
+        run: pytest -q tests/e2e
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -56,5 +62,5 @@ jobs:
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/is218-module-12:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/is218-module-12:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/is218-module-13:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/is218-module-13:${{ github.sha }}
