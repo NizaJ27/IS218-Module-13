@@ -274,19 +274,105 @@ pip install -r requirements.txt
 pytest -q
 ```
 
+To run only integration tests:
+
+```bash
+pytest tests/integration/ -v
+```
+
+To run tests with coverage:
+
+```bash
+pytest --cov=app --cov-report=html
+```
+
+## Testing with OpenAPI Documentation
+
+Start the FastAPI server locally:
+
+```bash
+python main.py
+```
+
+Access the interactive API documentation:
+
+- **Swagger UI**: `http://127.0.0.1:8000/docs`
+- **ReDoc**: `http://127.0.0.1:8000/redoc`
+
+### Manual Testing Steps
+
+1. **Register a User** (POST `/users/register`)
+   - Endpoint: `/users/register`
+   - Body: `{"username": "testuser", "email": "test@example.com", "password": "password123"}`
+   - Expected: 200 OK with user data (without password)
+
+2. **Login** (POST `/users/login`)
+   - Endpoint: `/users/login`
+   - Body: `{"username": "testuser", "password": "password123"}`
+   - Expected: 200 OK with user data
+
+3. **Create Calculation** (POST `/calculations`)
+   - Endpoint: `/calculations`
+   - Body: `{"a": 10, "b": 5, "type": "Add"}`
+   - Expected: 200 OK with calculation result
+
+4. **Browse Calculations** (GET `/calculations`)
+   - Endpoint: `/calculations`
+   - Expected: 200 OK with list of calculations
+
+5. **Read Specific Calculation** (GET `/calculations/{id}`)
+   - Endpoint: `/calculations/1`
+   - Expected: 200 OK with calculation details
+
+6. **Update Calculation** (PUT `/calculations/{id}`)
+   - Endpoint: `/calculations/1`
+   - Body: `{"a": 20, "b": 10, "type": "Multiply"}`
+   - Expected: 200 OK with updated calculation
+
+7. **Delete Calculation** (DELETE `/calculations/{id}`)
+   - Endpoint: `/calculations/1`
+   - Expected: 200 OK with deletion confirmation
+
 ## CI / Docker Hub
 
 - The repository includes a GitHub Actions workflow at `.github/workflows/ci.yml` that runs tests against a Postgres service and (on success) builds and pushes a Docker image to Docker Hub.
-- Docker Hub repository (replace with your repo): `docker.io/<your-username>/is218-module-10`
+- Docker Hub repository (replace with your repo): `docker.io/<your-username>/is218-module-12`
 
-**Docker Hub**: Replace with your published image, e.g. `docker.io/<your-username>/is218-module-11`.
+## Module 12 — User & Calculation CRUD with Integration Tests
 
-To run the newly added calculation tests specifically:
+This module completes the back-end logic with full CRUD operations for users and calculations.
+
+### Features Implemented
+
+- **User Endpoints**:
+  - POST `/users/register` - Register new users with email validation and password hashing
+  - POST `/users/login` - Authenticate users with username/password
+
+- **Calculation Endpoints (BREAD)**:
+  - POST `/calculations` - Add new calculations
+  - GET `/calculations` - Browse all calculations with pagination
+  - GET `/calculations/{id}` - Read specific calculation
+  - PUT `/calculations/{id}` - Edit existing calculation
+  - DELETE `/calculations/{id}` - Delete calculation
+
+### Running with Docker
+
+Pull and run the latest image from Docker Hub:
 
 ```bash
-pytest tests/unit/test_calculation.py -q
-pytest tests/integration/test_calculations_integration.py -q
+docker pull <your-dockerhub-username>/is218-module-12:latest
+docker run -p 8000:8000 <your-dockerhub-username>/is218-module-12:latest
 ```
+
+### Docker Hub Link
+
+**Docker Hub Repository**: [https://hub.docker.com/r/<your-dockerhub-username>/is218-module-12](https://hub.docker.com/r/<your-dockerhub-username>/is218-module-12)
+
+*Note: Replace `<your-dockerhub-username>` with your actual Docker Hub username.*
+
+---
+
+**Docker Hub**: Replace with your published image, e.g. `docker.io/<your-username>/is218-module-12`.
 
 ## Module 9 — PostgreSQL & pgAdmin (FastAPI + Postgres)
 
